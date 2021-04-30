@@ -1,0 +1,68 @@
+<resources>
+    <string name="app_name">Flix Search</string>
+    <string name="title_activity_main">MainActivity</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="title_activity_main2">MainActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_saved_movie">Saved Movies</string>
+    <string name="title_about">About</string>
+
+    <string name="btn_retry">Retry</string>
+
+    // Internet Status
+    <string name="label_connected_to_internet">Connected to Internet</string>
+    <string name="label_getting_movie_again">Getting movie again</string>
+    <string name="label_disconnected_to_internet">Disconnected to Internet</string>
+
+    // Movie Detail
+    <string name="label_title">Title</string>
+    <string name="label_imdb_plot">IMDB Plot</string>
+    <string name="label_synopsis">Synopsis</string>
+    <string name="label_maturity">Maturity</string>
+    <string name="label_runtime">Runtime</string>
+    <string name="label_genre">Genre</string>
+    <string name="label_available_region">Available Region</string>
+    <string name="label_save">Save</string>
+    <string name="label_saved">Saved</string>
+    <string name="label_watch_on_netflix">Watch on Netflix</string>
+    <string name="label_movie_type">type</string>
+    <string name="label_movie">movie</string>
+    <string name="label_series">series</string>
+    <string name="label_placeholder_rating">0/10</string>
+    <string name="label_rating">%1$d/10</string>
+    <string name="label_movie_year">%1$s(%2$s)</string>
+    <string name="toast_movie_saved">Movie has been saved to saved list</string>
+    <string name="toast_movie_save">Movie has been removed from saved list</string>
+
+    // Bottom Sheet Filter
+    <string name="label_movie_filter">Movie Filter</string>
+    <string name="label_imdb_rating">IMDB Rating</string>
+    <string name="label_year_range">Year Range</string>
+    <string name="label_country">Country</string>
+    <string name="label_check_all">Check All</string>
+    <string name="label_filter">Filter</string>
+
+    // About
+    <string name="label_rate_application">Rate Application</string>
+    <string name="label_share_application">Share Application</string>
+    <string name="label_used_libraries">Used Libraries</string>
+
+    // Country Detail
+    <string name="label_region">Region : </string>
+    <string name="label_subtitle">Subtitle : </string>
+    <string name="label_audio">Audio : </string>
+
+    // Home Fragment
+    // Filter
+    <string name="label_filter_year">1900–2021</string>
+    <string name="label_filter_rating">0–9</string>
+    <string name="label_filter_update">%1$s-%2$s</string>
+
+</resources>

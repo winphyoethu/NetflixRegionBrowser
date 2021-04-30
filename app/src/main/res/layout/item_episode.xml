@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="160dp"
+    android:layout_height="wrap_content"
+    android:layout_margin="2dp"
+    app:cardBackgroundColor="@color/indigo_800"
+    app:cardCornerRadius="4dp">
+
+    <TextView
+        android:id="@+id/tvEpisodeTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:fontFamily="@font/jost_regular"
+        android:gravity="center_vertical"
+        android:lines="2"
+        android:maxLines="2"
+        android:padding="4dp"
+        android:textColor="@color/white"
+        android:textSize="12sp"
+        tools:text="Ep 1 : Return of hanna grace" />
+
+</androidx.cardview.widget.CardView>

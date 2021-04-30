@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/clBottomSheet"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/bottom_sheet_behavior">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorPrimary"
+        android:padding="8dp">
+
+        <RelativeLayout
+            android:id="@+id/llHeader"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                style="@style/AvailableCountryHeader"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/label_movie_filter"
+                android:textColor="@color/colorAccent" />
+
+            <ImageView
+                android:id="@+id/ivClose"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_alignParentEnd="true"
+                android:padding="4dp"
+                android:src="@drawable/ic_clear"
+                app:tint="@color/colorAccent" />
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/tvImdbRatingHeader"
+            style="@style/AvailableCountryHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/label_imdb_rating"
+            android:textColor="@color/colorAccent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/llHeader" />
+
+        <androidx.appcompat.widget.AppCompatSeekBar
+            android:id="@+id/sbImdbRating"
+            android:layout_width="match_parent"
+            android:layout_height="24dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="6dp"
+            android:layout_marginEnd="32dp"
+            android:max="10"
+            android:progressBackgroundTint="@color/white"
+            app:layout_constraintBottom_toBottomOf="@id/tvImdbRatingEnd"
+            app:layout_constraintTop_toBottomOf="@id/tvImdbRatingHeader" />
+
+        <TextView
+            android:id="@+id/tvImdbRatingStart"
+            style="@style/AvailableCountryHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0"
+            android:textColor="@color/colorAccent"
+            app:layout_constraintEnd_toStartOf="@id/sbImdbRating"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvImdbRatingHeader" />
+
+        <TextView
+            android:id="@+id/tvImdbRatingEnd"
+            style="@style/AvailableCountryHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="10"
+            android:textColor="@color/colorAccent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/sbImdbRating"
+            app:layout_constraintTop_toBottomOf="@id/tvImdbRatingHeader" />
+
+        <TextView
+            android:id="@+id/tvYearRangeHeader"
+            style="@style/AvailableCountryHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/label_year_range"
+            android:textColor="@color/colorAccent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/sbImdbRating" />
+
+        <androidx.appcompat.widget.AppCompatSeekBar
+            android:id="@+id/sbYearRange"
+            android:layout_width="match_parent"
+            android:layout_height="24dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="6dp"
+            android:layout_marginEnd="32dp"
+            android:max="121"
+            android:progressBackgroundTint="@color/white"
+            app:layout_constraintBottom_toBottomOf="@id/tvYearStart"
+            app:layout_constraintTop_toBottomOf="@id/tvYearRangeHeader" />
+
+        <TextView
+            android:id="@+id/tvYearStart"
+            style="@style/AvailableCountryHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1900"
+            android:textColor="@color/colorAccent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvYearRangeHeader" />
+
+        <TextView
+            android:id="@+id/tvYearEnd"
+            style="@style/AvailableCountryHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2021"
+            android:textColor="@color/colorAccent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvYearRangeHeader" />
+
+        <RadioGroup
+            android:id="@+id/rgMovieOrSeries"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvYearEnd">
+
+            <RadioButton
+                android:id="@+id/rbMovie"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:buttonTint="@color/colorAccent"
+                android:checked="true"
+                android:fontFamily="@font/jost_regular"
+                android:text="@string/label_movie"
+                android:textColor="@color/colorAccent" />
+
+            <RadioButton
+                android:id="@+id/rbSeries"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:buttonTint="@color/colorAccent"
+                android:fontFamily="@font/jost_regular"
+                android:text="@string/label_series"
+                android:textColor="@color/colorAccent" />
+
+        </RadioGroup>
+
+        <TextView
+            android:id="@+id/tvFilterCountryHeader"
+            style="@style/AvailableCountryHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/label_country"
+            android:textColor="@color/colorAccent"
+            app:layout_constraintBottom_toBottomOf="@id/cbCountryCheckAll"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/rgMovieOrSeries" />
+
+        <CheckBox
+            android:id="@+id/cbCountryCheckAll"
+            style="@style/AvailableCountryHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:buttonTint="@color/colorAccent"
+            android:text="@string/label_check_all"
+            android:textColor="@color/colorAccent"
+            app:layout_constraintStart_toEndOf="@id/tvFilterCountryHeader"
+            app:layout_constraintTop_toBottomOf="@id/rgMovieOrSeries" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvFilterCountry"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toTopOf="@id/btnFilter"
+            app:layout_constraintTop_toBottomOf="@id/cbCountryCheckAll" />
+
+        <Button
+            android:id="@+id/btnFilter"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/jost_regular"
+            android:text="@string/label_filter"
+            android:textColor="@color/colorPrimary"
+            app:layout_constraintTop_toBottomOf="@id/rvFilterCountry" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
