@@ -1,11 +1,13 @@
 package com.winphyoethu.netflixmovieregionsearch.features.main
 
 import android.os.Bundle
+import android.util.Log
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import com.google.firebase.messaging.FirebaseMessaging
 import com.winphyoethu.netflixmovieregionsearch.R
 import com.winphyoethu.netflixmovieregionsearch.features.BaseActivity
 import com.winphyoethu.netflixmovieregionsearch.util.network.Mobile
@@ -54,6 +56,10 @@ class MainActivity : BaseActivity() {
 
                 })
         )
+
+        FirebaseMessaging.getInstance().token.addOnSuccessListener {
+            Log.i("currtoken :: ", it)
+        }
     }
 
     override fun getLayoutId(): Int = R.layout.activity_main

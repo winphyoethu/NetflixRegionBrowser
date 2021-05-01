@@ -5,6 +5,10 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+    <uses-permission android:name="com.google.android.c2dm.intent.RECEIVE"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <permission android:name="com.winphyoethu.netflixmovieregionsearch.permission.C2D_MESSAGE" android:protectionLevel="signature" />
+    <uses-permission android:name="com.winphyoethu.netflixmovieregionsearch.permission.C2D_MESSAGE" />
 
     <application
         android:name=".app.MovieSearchApp"
@@ -14,6 +18,18 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_channel_id"
+            android:value="@string/notification_channel_id" />
+
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/ic_clear" />
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/colorAccent" />
+
         <activity
             android:name=".features.main.ui.about.LibraryActivity"
             android:screenOrientation="portrait" />
@@ -32,7 +48,21 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
 
-<!--        <receiver android:name=".util.network.NetworkChangeReceiver" />-->
+        <service
+            android:name=".app.MyFirebaseMessagingService"
+            android:exported="false"
+            android:enabled="true"
+            android:stopWithTask="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+            </intent-filter>
+        </service>
+
+<!--        <receiver android:name="com.google.firebase.iid.FirebaseInstanceIdReceiver" />-->
+
     </application>
 
 </manifest>

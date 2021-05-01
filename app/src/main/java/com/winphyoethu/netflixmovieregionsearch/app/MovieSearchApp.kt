@@ -13,6 +13,7 @@ import com.facebook.cache.disk.DiskCacheConfig
 import com.facebook.common.util.ByteConstants
 import com.facebook.drawee.backends.pipeline.Fresco
 import com.facebook.imagepipeline.core.ImagePipelineConfig
+import com.google.firebase.messaging.FirebaseMessaging
 import com.winphyoethu.netflixmovieregionsearch.di.DaggerAppComponent
 import com.winphyoethu.netflixmovieregionsearch.util.network.NetworkChangeReceiver
 import dagger.android.AndroidInjector
@@ -61,6 +62,10 @@ class MovieSearchApp : Application(), HasAndroidInjector, LifecycleObserver {
             .build()
 
         Fresco.initialize(this, frescoPipeline)
+
+        FirebaseMessaging.getInstance().subscribeToTopic("").addOnSuccessListener {
+
+        }
     }
 
     override fun attachBaseContext(base: Context?) {

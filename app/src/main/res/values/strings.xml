@@ -36,10 +36,14 @@
     <string name="label_movie">movie</string>
     <string name="label_series">series</string>
     <string name="label_placeholder_rating">0/10</string>
-    <string name="label_rating">%1$d/10</string>
-    <string name="label_movie_year">%1$s(%2$s)</string>
+    <string name="label_rating">%1$s/10</string>
+    <string name="label_movie_year">%1$s(%2$d)</string>
     <string name="toast_movie_saved">Movie has been saved to saved list</string>
     <string name="toast_movie_save">Movie has been removed from saved list</string>
+    <string name="label_episode_title">Ep %1$d : %2$s</string>
+    <string name="label_ok">OK</string>
+    <string name="label_no_data_warning">No data to save</string>
+    <string name="label_warning_title">Warning</string>
 
     // Bottom Sheet Filter
     <string name="label_movie_filter">Movie Filter</string>
@@ -64,5 +68,8 @@
     <string name="label_filter_year">1900–2021</string>
     <string name="label_filter_rating">0–9</string>
     <string name="label_filter_update">%1$s-%2$s</string>
+
+    // Notification
+    <string name="notification_channel_id">netflix_region_browser</string>
 
 </resources>

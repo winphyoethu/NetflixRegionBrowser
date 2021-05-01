@@ -48,9 +48,9 @@ class MovieDetailActivity : BaseActivity() {
     private val episodeAdapter: EpisodeAdapter by lazy {
         EpisodeAdapter { episode, position ->
             val builder = AlertDialog.Builder(this, R.style.MyDialogStyle)
-            builder.setTitle("Ep ${position + 1} : ${episode.title}")
+            builder.setTitle(getString(R.string.label_episode_title, position + 1, episode.title))
                 .setMessage(Html.fromHtml(episode.synopsis))
-                .setPositiveButton("Ok") { dialog, _ ->
+                .setPositiveButton(getString(R.string.label_ok)) { dialog, _ ->
                     dialog.dismiss()
                 }
 
@@ -101,7 +101,6 @@ class MovieDetailActivity : BaseActivity() {
                 intent.data = Uri.parse(watchUrl)
                 startActivity(intent)
             }
-
         }
 
         tvSaveMovie.setOnClickListener {
@@ -113,9 +112,9 @@ class MovieDetailActivity : BaseActivity() {
                 }
             } else {
                 val builder = AlertDialog.Builder(this).apply {
-                    title = "Warning"
-                    setMessage("No data to save")
-                    setPositiveButton("OK") { dialog, _ ->
+                    title = getString(R.string.label_warning_title)
+                    setMessage(getString(R.string.label_no_data_warning))
+                    setPositiveButton(getString(R.string.label_ok)) { dialog, _ ->
                         dialog.dismiss()
                     }
                 }
@@ -157,8 +156,7 @@ class MovieDetailActivity : BaseActivity() {
                     when (it) {
                         Wifi -> {
                             textAndAnimation(
-                                tvNetworkStatus,
-                                getString(R.string.label_connected_to_internet),
+                                tvNetworkStatus, getString(R.string.label_connected_to_internet),
                                 R.drawable.ic_connected
                             )
                             if (!isFromSaved && tvMovieType.text == "type") {
@@ -173,8 +171,7 @@ class MovieDetailActivity : BaseActivity() {
                         }
                         Mobile -> {
                             textAndAnimation(
-                                tvNetworkStatus,
-                                getString(R.string.label_connected_to_internet),
+                                tvNetworkStatus, getString(R.string.label_connected_to_internet),
                                 R.drawable.ic_connected
                             )
                             if (!isFromSaved && tvMovieType.text == "type") {
@@ -211,12 +208,11 @@ class MovieDetailActivity : BaseActivity() {
                             val movie = it.movieDetail
                             tvMoviePlot.text = Html.fromHtml(movie.imdbPlot)
                             tvMovieSynopsis.text = Html.fromHtml(movie.synopsis)
-                            tvMovieRunTime.text = "${movie.imdbRuntime}"
-                            tvMovieGenre.text = "${movie.imdbGenre}"
+                            tvMovieRunTime.text = movie.imdbRuntime.toString()
+                            tvMovieGenre.text = movie.imdbGenre.toString()
                             tvMovieType.text = movie.vType
-                            tvMovieTitle.text =
-                                String.format(getString(R.string.label_movie_year), movie.title, movie.year)
-                            tvMovieRating.text = String.format(getString(R.string.label_rating), movie.avgRating)
+                            tvMovieTitle.text = getString(R.string.label_movie_year, movie.title, movie.year)
+                            tvMovieRating.text = getString(R.string.label_rating, movie.imdbRating.toString())
                             if (!movie.matLabel.isNullOrEmpty()) {
                                 tvMovieMaturity.text = movie.matLabel
                             } else {

@@ -2,6 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'com.google.gms.google-services'
 
 android {
     compileSdkVersion 30
@@ -20,7 +21,7 @@ android {
 
         javaCompileOptions {
             annotationProcessorOptions {
-                arguments = ["room.schemaLocation" : "$projectDir/schemas".toString()]
+                arguments = ["room.schemaLocation": "$projectDir/schemas".toString()]
             }
         }
 
@@ -72,7 +73,6 @@ dependencies {
     implementation "com.squareup.retrofit2:adapter-rxjava2:2.9.0"
 
     // rxBinding
-//    implementation  'com.jakewharton.rxbinding2:rxbinding:2.0.0'
     implementation 'com.jakewharton.rxbinding4:rxbinding-core:4.0.0'
     implementation 'com.jakewharton.rxbinding4:rxbinding-appcompat:4.0.0'
 
@@ -83,8 +83,8 @@ dependencies {
     implementation "androidx.paging:paging-rxjava2-ktx:2.1.2"
 
     // room
-    implementation 'androidx.room:room-runtime:2.2.6'
-    implementation 'androidx.room:room-rxjava2:2.2.6'
+    implementation 'androidx.room:room-runtime:2.3.0'
+    implementation 'androidx.room:room-rxjava2:2.3.0'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
     implementation 'androidx.navigation:navigation-fragment-ktx:2.3.5'
     implementation 'androidx.navigation:navigation-ui-ktx:2.3.5'
@@ -92,7 +92,7 @@ dependencies {
     implementation 'androidx.navigation:navigation-ui-ktx:2.3.5'
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.3.1'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1'
-    kapt 'androidx.room:room-compiler:2.2.6'
+    kapt 'androidx.room:room-compiler:2.3.0'
 
     // fresco
     implementation 'com.facebook.fresco:fresco:2.3.0'
@@ -105,6 +105,11 @@ dependencies {
     implementation 'com.google.dagger:dagger-android-support:2.31.2'
     kapt 'com.google.dagger:dagger-compiler:2.31.2'
     kapt "com.google.dagger:dagger-android-processor:2.25.2"
+
+    // Firebase
+    implementation platform('com.google.firebase:firebase-bom:27.1.0')
+    implementation 'com.google.firebase:firebase-analytics-ktx'
+    implementation 'com.google.firebase:firebase-messaging-ktx'
 
     debugImplementation 'com.readystatesoftware.chuck:library:1.1.0'
     releaseImplementation 'com.readystatesoftware.chuck:library-no-op:1.1.0'
