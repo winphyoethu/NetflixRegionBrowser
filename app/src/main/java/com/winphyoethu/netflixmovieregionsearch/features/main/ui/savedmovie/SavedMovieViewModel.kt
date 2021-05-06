@@ -1,10 +1,9 @@
 package com.winphyoethu.netflixmovieregionsearch.features.main.ui.savedmovie
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
-import com.winphyoethu.netflixmovieregionsearch.data.local.LocalRepository
 import com.winphyoethu.netflixmovieregionsearch.data.remote.model.movie.MovieRemote
-import com.winphyoethu.netflixmovieregionsearch.util.mapper.MovieMapper
+import com.winphyoethu.netflixmovieregionsearch.domain.mapper.MovieMapper
+import com.winphyoethu.netflixmovieregionsearch.domain.repository.MovieRepository
 import com.winphyoethu.netflixmovieregionsearch.util.rx.Async
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
@@ -12,8 +11,10 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class SavedMovieViewModel @Inject constructor(
-    val localRepository: LocalRepository, val async: Async
+    val movieRepository: MovieRepository, val async: Async
 ) : ViewModel() {
+
+    private val TAG = SavedMovieViewModel::class.java.name
 
     val savedMovieSubject: PublishSubject<SavedMovieState> = PublishSubject.create()
 
@@ -21,7 +22,7 @@ class SavedMovieViewModel @Inject constructor(
 
     fun getMovie() {
         compositeDisposable.add(
-            localRepository.getMovieList()
+            movieRepository.getMovieList()
                 .map {
                     val movieRemoteList: MutableList<MovieRemote> = ArrayList()
 
@@ -46,4 +47,8 @@ class SavedMovieViewModel @Inject constructor(
         )
     }
 
+    override fun onCleared() {
+        super.onCleared()
+        compositeDisposable.clear()
+    }
 }

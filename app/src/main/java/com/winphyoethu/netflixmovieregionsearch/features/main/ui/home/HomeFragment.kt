@@ -2,9 +2,7 @@ package com.winphyoethu.netflixmovieregionsearch.features.main.ui.home
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.*
-import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment
@@ -12,20 +10,16 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.jakewharton.rxbinding4.appcompat.queryTextChanges
 import com.jakewharton.rxbinding4.view.clicks
 import com.winphyoethu.netflixmovieregionsearch.R
-import com.winphyoethu.netflixmovieregionsearch.data.remote.model.movie.MovieRemote
 import com.winphyoethu.netflixmovieregionsearch.features.BaseFragment
 import com.winphyoethu.netflixmovieregionsearch.features.detail.IS_FROM_SAVED
 import com.winphyoethu.netflixmovieregionsearch.features.detail.MOVIE_ID
 import com.winphyoethu.netflixmovieregionsearch.features.detail.MovieDetailActivity
 import com.winphyoethu.netflixmovieregionsearch.util.ViewUtil
 import com.winphyoethu.netflixmovieregionsearch.util.network.GlobalNetworkState
-import com.winphyoethu.netflixmovieregionsearch.util.network.Mobile
-import com.winphyoethu.netflixmovieregionsearch.util.network.Wifi
 import com.winphyoethu.netflixmovieregionsearch.util.rx.Async
 import io.reactivex.rxjava3.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.fragment_home.*
-import java.lang.Exception
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 

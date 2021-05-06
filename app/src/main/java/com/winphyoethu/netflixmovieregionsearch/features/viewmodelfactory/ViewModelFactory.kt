@@ -1,4 +1,4 @@
-package com.winphyoethu.netflixmovieregionsearch.features.factory
+package com.winphyoethu.netflixmovieregionsearch.features.viewmodelfactory
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider

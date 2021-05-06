@@ -4,12 +4,13 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.paging.PagedList
 import androidx.paging.RxPagedListBuilder
-import com.winphyoethu.netflixmovieregionsearch.data.local.LocalRepository
 import com.winphyoethu.netflixmovieregionsearch.data.local.database.entities.Country
-import com.winphyoethu.netflixmovieregionsearch.data.remote.RemoteRepository
 import com.winphyoethu.netflixmovieregionsearch.data.remote.model.movie.MovieRemote
+import com.winphyoethu.netflixmovieregionsearch.domain.mapper.CountryMapper
+import com.winphyoethu.netflixmovieregionsearch.domain.repository.CountryRepository
+import com.winphyoethu.netflixmovieregionsearch.domain.repository.RemoteRepository
 import com.winphyoethu.netflixmovieregionsearch.features.main.FilterModel
-import com.winphyoethu.netflixmovieregionsearch.util.mapper.CountryMapper
+import com.winphyoethu.netflixmovieregionsearch.features.main.ui.savedmovie.SavedMovieViewModel
 import com.winphyoethu.netflixmovieregionsearch.util.rx.Async
 import io.reactivex.Observable
 import io.reactivex.Single
@@ -19,8 +20,10 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class HomeViewModel @Inject constructor(
-    val remoteRepository: RemoteRepository, val asyncManager: Async, val localRepository: LocalRepository
+    val remoteRepository: RemoteRepository, val asyncManager: Async, val countryRepository: CountryRepository
 ) : ViewModel() {
+
+    private val TAG = SavedMovieViewModel::class.java.name
 
     val countrySubject: PublishSubject<List<Country>> = PublishSubject.create()
     val homeViewStateSubject: PublishSubject<HomeViewState> = PublishSubject.create()
@@ -42,7 +45,6 @@ class HomeViewModel @Inject constructor(
     private var homeState: HomeViewState? = null
 
     init {
-        Log.i("localrepo :: ", localRepository.hashCode().toString())
         val config = PagedList.Config.Builder()
             .setPageSize(20)
             .build()
@@ -143,7 +145,7 @@ class HomeViewModel @Inject constructor(
                     countryList.addAll(it)
                     saveCountries(it)
                 }, {
-                    Log.i("SAVEERROR1 :: ", it.message + " :: FUCK")
+                    Log.i(TAG, it.message + " :: GET COUNTRY ERROR")
                 })
         )
     }
@@ -158,7 +160,7 @@ class HomeViewModel @Inject constructor(
     fun checkCountries() {
         if (countryList.isEmpty()) {
             compositeDisposable.add(
-                localRepository.getCountries()
+                countryRepository.getCountries()
                     .subscribeOn(asyncManager.io())
                     .observeOn(asyncManager.main())
                     .subscribe({
@@ -187,21 +189,19 @@ class HomeViewModel @Inject constructor(
 
     private fun saveCountries(countryList: List<Country>) {
         compositeDisposable.add(
-            localRepository.saveCountries(countryList)
+            countryRepository.saveCountries(countryList)
                 .subscribeOn(asyncManager.io())
                 .subscribe({
-                    Log.i("SAVEERROR NOT :: ", it.toString() + " :: FUCK")
+                    Log.i(TAG, "$it :: SAVE SUCCESS")
                 }, {
-                    Log.i("SAVEERROR :: ", it.message + " :: FUCK")
+                    Log.i(TAG, it.message + " :: SAVE ERROR")
                 })
         )
     }
 
     fun observeMovie() {
-//        homeViewStateSubject.onNext(Loading)
         if (homeState != null && (homeState is Empty || homeState is Error)) {
             if (homeSourceFactory.homeDataSource != null) {
-                Log.i("doggymama :: ", "yes it is")
                 homeSourceFactory.homeDataSource!!.invalidate()
                 homeState = null
             }
@@ -225,10 +225,10 @@ class HomeViewModel @Inject constructor(
                     it.isNotEmpty()
                 }
                 .subscribe({
-                    Log.i("doggyshit :: ", it.toString())
+                    Log.i(TAG, "$it PAGED LISt")
                     homeViewStateSubject.onNext(Show(it))
                 }, {
-                    Log.i("doggy :: ", it.message.toString() + " DICK")
+                    Log.i(TAG, it.message.toString() + "PAGED LIST ERROR")
                 })
         )
 
@@ -250,7 +250,7 @@ class HomeViewModel @Inject constructor(
                         }
                     }
                 }, {
-                    Log.i("fuckshit :: ", "satpat" + it.localizedMessage.toString())
+                    Log.i(TAG, it.localizedMessage.toString() + " INITIAL NETWORK")
                 })
         )
 
@@ -278,13 +278,15 @@ class HomeViewModel @Inject constructor(
                 .subscribeOn(asyncManager.io())
                 .observeOn(asyncManager.main())
                 .subscribe({
-                    Log.i("OBSERVE", it.toString())
                     filterSubject.onNext(it)
-
                 }, {
 
                 })
         )
     }
 
+    override fun onCleared() {
+        super.onCleared()
+        compositeDisposable.clear()
+    }
 }

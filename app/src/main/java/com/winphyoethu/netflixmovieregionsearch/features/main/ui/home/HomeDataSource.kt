@@ -2,27 +2,19 @@ package com.winphyoethu.netflixmovieregionsearch.features.main.ui.home
 
 import android.util.Log
 import androidx.paging.ItemKeyedDataSource
-import com.winphyoethu.netflixmovieregionsearch.data.remote.ApiService
-import com.winphyoethu.netflixmovieregionsearch.data.remote.RemoteRepository
-import com.winphyoethu.netflixmovieregionsearch.data.remote.model.movie.AllMovie
 import com.winphyoethu.netflixmovieregionsearch.data.remote.model.movie.MovieRemote
+import com.winphyoethu.netflixmovieregionsearch.domain.repository.RemoteRepository
 import com.winphyoethu.netflixmovieregionsearch.features.main.FilterModel
 import com.winphyoethu.netflixmovieregionsearch.util.rx.Async
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 import retrofit2.HttpException
 import java.io.IOException
-import javax.inject.Inject
 
 class HomeDataSource(
-    val remoteRepository: RemoteRepository,
-    var filter: FilterModel,
-    val async: Async,
-    val initialNetworkState: PublishSubject<NetworkState>,
-    val networkState: PublishSubject<NetworkState>
-) :
-    ItemKeyedDataSource<Int, MovieRemote>() {
+    val remoteRepository: RemoteRepository, var filter: FilterModel, val async: Async,
+    val initialNetworkState: PublishSubject<NetworkState>, val networkState: PublishSubject<NetworkState>
+) : ItemKeyedDataSource<Int, MovieRemote>() {
 
     private var newDate: String = ""
     private var genre: String = ""

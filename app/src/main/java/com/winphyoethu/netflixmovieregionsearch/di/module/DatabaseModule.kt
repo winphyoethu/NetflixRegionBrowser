@@ -10,11 +10,13 @@ import com.winphyoethu.netflixmovieregionsearch.data.local.database.dao.EpisodeD
 import com.winphyoethu.netflixmovieregionsearch.data.local.database.dao.MovieDao
 import dagger.Module
 import dagger.Provides
+import javax.inject.Singleton
 
 @Module
 class DatabaseModule {
 
     @Provides
+    @Singleton
     fun providesDatabase(application: Application): MovieDatabase {
         return Room.databaseBuilder(application, MovieDatabase::class.java, "movie")
             .build()

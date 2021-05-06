@@ -1,4 +1,4 @@
-package com.winphyoethu.netflixmovieregionsearch.data.remote
+package com.winphyoethu.netflixmovieregionsearch.domain.repository
 
 import com.winphyoethu.netflixmovieregionsearch.data.remote.model.country.AllCountryRemote
 import com.winphyoethu.netflixmovieregionsearch.data.remote.model.genre.AllGenre
@@ -21,13 +21,7 @@ interface RemoteRepository {
         countryAndOrUnique: String, offset: String, endYear: String,
     ): Single<AllMovie>
 
-    fun getGenres(): Single<AllGenre>
-
     fun getMovieDetail(netflixId: Int): Single<AllMovieDetail>
-
-    fun getMovieImages(netflixId: Int, offset: Int, limit: Int): Single<AllImageDetail>
-
-    fun getGenresDetail(netflixId: Int): Single<AllGenreDetail>
 
     fun getCountriesDetail(netflixId: Int): Single<AllCountryDetail>
 

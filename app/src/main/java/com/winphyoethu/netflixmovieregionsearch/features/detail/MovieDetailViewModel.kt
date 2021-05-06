@@ -2,16 +2,18 @@ package com.winphyoethu.netflixmovieregionsearch.features.detail
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
-import androidx.room.ColumnInfo
-import com.winphyoethu.netflixmovieregionsearch.data.local.LocalRepository
 import com.winphyoethu.netflixmovieregionsearch.data.local.database.entities.AvailableCountry
 import com.winphyoethu.netflixmovieregionsearch.data.local.database.entities.Episode
 import com.winphyoethu.netflixmovieregionsearch.data.local.database.entities.Movie
-import com.winphyoethu.netflixmovieregionsearch.data.remote.RemoteRepository
 import com.winphyoethu.netflixmovieregionsearch.data.remote.model.moviedetail.CountryDetail
 import com.winphyoethu.netflixmovieregionsearch.data.remote.model.moviedetail.MovieDetail
 import com.winphyoethu.netflixmovieregionsearch.data.remote.model.moviedetail.season.SeasonModel
-import com.winphyoethu.netflixmovieregionsearch.util.mapper.MovieMapper
+import com.winphyoethu.netflixmovieregionsearch.domain.mapper.MovieMapper
+import com.winphyoethu.netflixmovieregionsearch.domain.mapper.SeasonEpisodeMapper
+import com.winphyoethu.netflixmovieregionsearch.domain.repository.EpisodeRepository
+import com.winphyoethu.netflixmovieregionsearch.domain.repository.MovieRepository
+import com.winphyoethu.netflixmovieregionsearch.domain.repository.RemoteRepository
+import com.winphyoethu.netflixmovieregionsearch.features.main.ui.savedmovie.SavedMovieViewModel
 import com.winphyoethu.netflixmovieregionsearch.util.rx.Async
 import io.reactivex.Maybe
 import io.reactivex.Observable
@@ -22,15 +24,11 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class MovieDetailViewModel @Inject constructor(
-    val remoteRepository: RemoteRepository, val localRepository: LocalRepository, val async: Async
+    val remoteRepository: RemoteRepository, val movieRepository: MovieRepository, val async: Async,
+    val episodeRepository: EpisodeRepository
 ) : ViewModel() {
 
-//    val movieSubject: PublishSubject<MovieDetail> = PublishSubject.create()
-//    val countrySubject: PublishSubject<List<CountryDetail>> = PublishSubject.create()
-//    val isSavedSubject: PublishSubject<Boolean> = PublishSubject.create()
-//    val checkSavedSubject: PublishSubject<Boolean> = PublishSubject.create()
-//    val seasonSubject: PublishSubject<List<SeasonModel>> = PublishSubject.create()
-//    val episodeSubject: PublishSubject<List<EpisodeModel>> = PublishSubject.create()
+    private val TAG = SavedMovieViewModel::class.java.name
 
     val movieDetailSubject: PublishSubject<MovieDetailState> = PublishSubject.create()
 
@@ -56,7 +54,7 @@ class MovieDetailViewModel @Inject constructor(
 
     private fun getMovieFromDatabase(netflixId: Int) {
         compositeDisposable.add(
-            localRepository.getMovieAndAvailableCountry(netflixId)
+            movieRepository.getMovieAndAvailableCountry(netflixId)
                 .map {
                     this.movie = it.movie
 
@@ -64,7 +62,7 @@ class MovieDetailViewModel @Inject constructor(
                     movieMap[0] = MovieMapper.movieToMovieDetail(it.movie)
                     movieMap[1] = MovieMapper.availableCountryToCountryDetail(it.countryList)
                     it.episodeList?.let { episodeList ->
-                        movieMap[2] = MovieMapper.episodeToSeasonModel(episodeList)
+                        movieMap[2] = SeasonEpisodeMapper.episodeToSeasonModel(episodeList)
                     }
 
                     movieMap
@@ -76,16 +74,13 @@ class MovieDetailViewModel @Inject constructor(
                     movieDetailSubject.onNext(ShowMovieDetail(it[0] as MovieDetail))
                     movieDetailSubject.onNext(ShowCountries(it[1] as List<CountryDetail>))
                     movieDetailSubject.onNext(CheckSavedMovie(true))
-//                    movieSubject.onNext(it[0] as MovieDetail)
-//                    countrySubject.onNext(it[1] as List<CountryDetail>)
                     if (it[2] != null) {
                         val seasonModelList = it[2] as List<SeasonModel>
                         seasonList.addAll(seasonModelList)
-//                        seasonSubject.onNext(seasonList)
                         movieDetailSubject.onNext(ShowSeasons(seasonList))
                     }
                 }, {
-                    Log.i("CHEKMOVIEERR :: ", it.message.toString() +" :: DICK")
+                    Log.i(TAG, it.message.toString() + " :: GET MOVIE FROM DB ERROR")
                 })
         )
     }
@@ -96,7 +91,6 @@ class MovieDetailViewModel @Inject constructor(
                 .subscribeOn(async.io())
                 .subscribe({
                     movieDetail = it.movieList[0]
-//                    movieSubject.onNext(it.movieList[0])
 
                     movieDetailSubject.onNext(ShowMovieDetail(it.movieList[0]))
 
@@ -113,7 +107,6 @@ class MovieDetailViewModel @Inject constructor(
                     } else {
                         "No Internet Connection"
                     }
-
                     movieDetailSubject.onNext(ShowError(message, false))
                 })
         )
@@ -126,11 +119,10 @@ class MovieDetailViewModel @Inject constructor(
                 .observeOn(async.main())
                 .subscribe({
                     countryList.addAll(it.countryList)
-//                    countrySubject.onNext(it.countryList)
 
                     movieDetailSubject.onNext(ShowCountries(it.countryList))
                 }, {
-                    Log.i("FUCKERR :: ", it.toString())
+                    Log.i(TAG, "$it GET MOVIE COUNTRY ERROR")
                 })
         )
     }
@@ -142,20 +134,18 @@ class MovieDetailViewModel @Inject constructor(
                     MovieMapper.movieDetailToMovie(it)
                 }
                 .flatMap {
-                    localRepository.saveMovie(it)
+                    movieRepository.saveMovie(it)
                 }
                 .subscribeOn(async.io())
                 .observeOn(async.main())
                 .subscribe({
                     it?.let {
                         if (it > 0) {
-//                            isSavedSubject.onNext(true)
-
                             movieDetailSubject.onNext(ShowIsSavedMovie(true))
                         }
                     }
                 }, {
-                    Log.i("FUCK :: ", it.toString())
+                    Log.i(TAG, "$it SAVE MOVIE ERROR")
                 })
         )
 
@@ -165,25 +155,22 @@ class MovieDetailViewModel @Inject constructor(
                     val aCountryList: MutableList<AvailableCountry> = ArrayList()
 
                     it.forEach { country ->
-                        aCountryList.add(
-                            MovieMapper.countryDetailToAvailableCountry(country, netflixId)
-                        )
+                        aCountryList.add(MovieMapper.countryDetailToAvailableCountry(country, netflixId))
                     }
 
                     aCountryList
                 }
                 .flatMap {
-                    localRepository.saveAvailableCountry(it)
+                    movieRepository.saveAvailableCountry(it)
                 }
                 .subscribeOn(async.io())
                 .observeOn(async.main())
                 .subscribe({
-                    Log.i("FUCKERROR :: ", it.toString() + " YES ")
+                    Log.i(TAG, "$it SAVE AVAILABLE COUNTRY SUCCESS")
                 }, {
-                    Log.i("FUCKERROR :: ", it.toString() + " NO")
+                    Log.i(TAG, "$it SAVE AVAILABLE COUNTRY ERROR")
                 })
         )
-        Log.i("FUCKERROR :: ", countryList.toString())
 
         saveEpisodes(seasonList)
     }
@@ -192,49 +179,45 @@ class MovieDetailViewModel @Inject constructor(
         val episodeList: MutableList<Episode> = ArrayList()
         seasonList.forEach { season ->
             season.episodeList.forEach { episode ->
-                episodeList.add(MovieMapper.episodeModelToEpisode(episode, season, netflixId))
+                episodeList.add(SeasonEpisodeMapper.episodeModelToEpisode(episode, season, netflixId))
             }
         }
 
         compositeDisposable.add(
-            localRepository.saveEpisodes(episodeList)
+            episodeRepository.saveEpisodes(episodeList)
                 .subscribeOn(async.io())
                 .observeOn(async.io())
                 .subscribe({
-                    Log.i("SAVEEPISODES :: ", it.toString())
+                    Log.i(TAG, "$it SAVE EPISODE SUCCESS")
                 }, {
-                    Log.i("SAVEEPISODES :: ", it.message.toString() + " ERROR")
+                    Log.i(TAG, it.message.toString() + " SAVE EPISODE ERROR")
                 })
         )
     }
 
     fun deleteMovie() {
         compositeDisposable.add(
-            localRepository.deleteMovie(movie)
+            movieRepository.deleteMovie(movie)
                 .subscribeOn(async.io())
                 .observeOn(async.main())
                 .subscribe({
-//                    isSavedSubject.onNext(false)
                     movieDetailSubject.onNext(ShowIsSavedMovie(false))
                 }, {
-                    Log.i("DELETERROR :: ", it.message.toString())
+                    Log.i(TAG, it.message.toString() + " DELETE MOVIE ERROR")
                 })
         )
     }
 
     private fun checkMovie(netflixId: Int) {
         compositeDisposable.add(
-            localRepository.checkMovie(netflixId)
+            movieRepository.checkMovie(netflixId)
                 .subscribeOn(async.io())
                 .subscribe({
-                    Log.i("CHEKMOVIEERR :: ", it.toString() + " FUCK")
                     if (it != null) {
                         if (it > 0) {
                             getMovieFromDatabase(netflixId)
-//                            checkSavedSubject.onNext(true)
                             movieDetailSubject.onNext(CheckSavedMovie(true))
                         } else {
-//                            checkSavedSubject.onNext(false)
                             movieDetailSubject.onNext(CheckSavedMovie(false))
                             getMovieFromNetwork(netflixId)
                             getMovieCountries(netflixId)
@@ -242,13 +225,11 @@ class MovieDetailViewModel @Inject constructor(
                     } else {
                         getMovieFromNetwork(netflixId)
                         getMovieCountries(netflixId)
-//                        checkSavedSubject.onNext(false)
                         movieDetailSubject.onNext(CheckSavedMovie(false))
                     }
                 }, {
                     getMovieFromNetwork(netflixId)
                     getMovieCountries(netflixId)
-//                    checkSavedSubject.onNext(false)
                     movieDetailSubject.onNext(CheckSavedMovie(false))
                 })
         )
@@ -261,7 +242,6 @@ class MovieDetailViewModel @Inject constructor(
                 .observeOn(async.main())
                 .subscribe({
                     seasonList.addAll(it)
-//                    seasonSubject.onNext(it)
 
                     movieDetailSubject.onNext(ShowSeasons(it))
                 }, {
@@ -275,12 +255,15 @@ class MovieDetailViewModel @Inject constructor(
             Observable.just(seasonList[position].episodeList)
                 .observeOn(async.main())
                 .subscribe({
-//                    episodeSubject.onNext(it)
                     movieDetailSubject.onNext(ShowEpisodes(it))
                 }, {
-                    Log.i("SPERROR :: ", it.message.toString())
+                    Log.i(TAG, it.message.toString() + " GET EPISODE ERROR")
                 })
         )
     }
 
+    override fun onCleared() {
+        super.onCleared()
+        compositeDisposable.clear()
+    }
 }

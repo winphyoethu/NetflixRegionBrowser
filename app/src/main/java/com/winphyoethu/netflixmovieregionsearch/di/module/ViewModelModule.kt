@@ -3,7 +3,7 @@ package com.winphyoethu.netflixmovieregionsearch.di.module
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.winphyoethu.netflixmovieregionsearch.features.detail.MovieDetailViewModel
-import com.winphyoethu.netflixmovieregionsearch.features.factory.ViewModelFactory
+import com.winphyoethu.netflixmovieregionsearch.features.viewmodelfactory.ViewModelFactory
 import com.winphyoethu.netflixmovieregionsearch.features.main.ui.savedmovie.SavedMovieViewModel
 import com.winphyoethu.netflixmovieregionsearch.features.main.ui.home.HomeViewModel
 import dagger.Binds

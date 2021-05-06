@@ -5,11 +5,15 @@ import android.util.Log
 import com.readystatesoftware.chuck.ChuckInterceptor
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
-import com.winphyoethu.netflixmovieregionsearch.data.local.LocalRepository
-import com.winphyoethu.netflixmovieregionsearch.data.local.LocalRepositoryImpl
+import com.winphyoethu.netflixmovieregionsearch.data.local.repository.CountryRepositoryImpl
+import com.winphyoethu.netflixmovieregionsearch.data.local.repository.EpisodeRepositoryImpl
+import com.winphyoethu.netflixmovieregionsearch.data.local.repository.MovieRepositoryImpl
 import com.winphyoethu.netflixmovieregionsearch.data.remote.ApiService
-import com.winphyoethu.netflixmovieregionsearch.data.remote.RemoteRepository
-import com.winphyoethu.netflixmovieregionsearch.data.remote.RemoteRepositoryImpl
+import com.winphyoethu.netflixmovieregionsearch.data.remote.respository.RemoteRepositoryImpl
+import com.winphyoethu.netflixmovieregionsearch.domain.repository.CountryRepository
+import com.winphyoethu.netflixmovieregionsearch.domain.repository.EpisodeRepository
+import com.winphyoethu.netflixmovieregionsearch.domain.repository.MovieRepository
+import com.winphyoethu.netflixmovieregionsearch.domain.repository.RemoteRepository
 import com.winphyoethu.netflixmovieregionsearch.util.network.GlobalNetworkState
 import com.winphyoethu.netflixmovieregionsearch.util.rx.Async
 import com.winphyoethu.netflixmovieregionsearch.util.rx.AsyncManager
@@ -48,10 +52,7 @@ class AppModule {
                     .build()
 
                 val newRequest = request.newBuilder()
-                    .addHeader(
-                        "x-rapidapi-key",
-                        "9d9c2b1e06msh42e05ecd5f8f6a8p16add4jsnaaede2524043"
-                    )
+                    .addHeader("x-rapidapi-key", "9d9c2b1e06msh42e05ecd5f8f6a8p16add4jsnaaede2524043")
                     .addHeader("x-rapidapi-host", "unogsng.p.rapidapi.com")
                     .addHeader("useQueryString", "true")
                     .addHeader("Cache-Control", cacheControl.toString())
@@ -79,8 +80,7 @@ class AppModule {
 
     @Provides
     fun providesOkHttp(
-        @Named("headerInterceptor") headerInterceptor: Interceptor,
-        app: Application
+        @Named("headerInterceptor") headerInterceptor: Interceptor, app: Application
     ): OkHttpClient {
         return OkHttpClient().newBuilder()
             .addInterceptor(ChuckInterceptor(app))
@@ -128,7 +128,13 @@ class AppModule {
         fun bindsRemoteRepository(remoteRepository: RemoteRepositoryImpl): RemoteRepository
 
         @Binds
-        fun bindsLocalRepository(localRepository: LocalRepositoryImpl): LocalRepository
+        fun bindsMovieRepository(movieRepository: MovieRepositoryImpl): MovieRepository
+
+        @Binds
+        fun bindsEpisodeRepository(episodeRepository: EpisodeRepositoryImpl): EpisodeRepository
+
+        @Binds
+        fun bindsCountryRepository(countryRepository: CountryRepositoryImpl): CountryRepository
 
         @Binds
         fun bindAsyncManager(asyncManager: AsyncManager): Async
