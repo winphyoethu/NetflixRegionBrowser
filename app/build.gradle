@@ -17,6 +17,8 @@ android {
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
 
+        buildConfigField "String", "API_KEY", "\"${project.API_KEY}\""
+
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         javaCompileOptions {

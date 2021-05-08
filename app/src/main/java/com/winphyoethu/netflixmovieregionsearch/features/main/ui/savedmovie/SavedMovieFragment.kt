@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
+import com.winphyoethu.netflixmovieregionsearch.BuildConfig
 import com.winphyoethu.netflixmovieregionsearch.R
 import com.winphyoethu.netflixmovieregionsearch.features.BaseFragment
 import com.winphyoethu.netflixmovieregionsearch.features.detail.IS_FROM_SAVED

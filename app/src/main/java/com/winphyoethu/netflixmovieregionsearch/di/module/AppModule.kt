@@ -5,6 +5,7 @@ import android.util.Log
 import com.readystatesoftware.chuck.ChuckInterceptor
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
+import com.winphyoethu.netflixmovieregionsearch.BuildConfig
 import com.winphyoethu.netflixmovieregionsearch.data.local.repository.CountryRepositoryImpl
 import com.winphyoethu.netflixmovieregionsearch.data.local.repository.EpisodeRepositoryImpl
 import com.winphyoethu.netflixmovieregionsearch.data.local.repository.MovieRepositoryImpl
@@ -52,7 +53,7 @@ class AppModule {
                     .build()
 
                 val newRequest = request.newBuilder()
-                    .addHeader("x-rapidapi-key", "9d9c2b1e06msh42e05ecd5f8f6a8p16add4jsnaaede2524043")
+                    .addHeader("x-rapidapi-key", BuildConfig.API_KEY)
                     .addHeader("x-rapidapi-host", "unogsng.p.rapidapi.com")
                     .addHeader("useQueryString", "true")
                     .addHeader("Cache-Control", cacheControl.toString())
